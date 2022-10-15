@@ -1,5 +1,4 @@
-"""
-Задание 2.
+""" Задание 2.
 
 Приведен код, который формирует из введенного числа
 обратное по порядку входящих в него цифр.
@@ -8,8 +7,7 @@
 Сделаны замеры обеих реализаций.
 
 Сделайте аналитику, нужна ли здесь мемоизация или нет и почему?!!!
-Будьте внимательны, задание хитрое. Не все так просто, как кажется.
-"""
+Будьте внимательны, задание хитрое. Не все так просто, как кажется."""
 
 from timeit import timeit
 from random import randint
@@ -19,28 +17,6 @@ def recursive_reverse(number):
     if number == 0:
         return ''
     return f'{str(number % 10)}{recursive_reverse(number // 10)}'
-
-
-num_100 = randint(10000, 1000000)
-num_1000 = randint(1000000, 10000000)
-num_10000 = randint(100000000, 10000000000000)
-
-print('Не оптимизированная функция recursive_reverse')
-print(
-    timeit(
-        "recursive_reverse(num_100)",
-        setup='from __main__ import recursive_reverse, num_100',
-        number=10000))
-print(
-    timeit(
-        "recursive_reverse(num_1000)",
-        setup='from __main__ import recursive_reverse, num_1000',
-        number=10000))
-print(
-    timeit(
-        "recursive_reverse(num_10000)",
-        setup='from __main__ import recursive_reverse, num_10000',
-        number=10000))
 
 
 def memoize(f):
@@ -63,19 +39,50 @@ def recursive_reverse_mem(number):
     return f'{str(number % 10)}{recursive_reverse_mem(number // 10)}'
 
 
-print('Оптимизированная функция recursive_reverse_mem')
-print(
-    timeit(
-        'recursive_reverse_mem(num_100)',
-        setup='from __main__ import recursive_reverse_mem, num_100',
-        number=10000))
-print(
-    timeit(
-        'recursive_reverse_mem(num_1000)',
-        setup='from __main__ import recursive_reverse_mem, num_1000',
-        number=10000))
-print(
-    timeit(
-        'recursive_reverse_mem(num_10000)',
-        setup='from __main__ import recursive_reverse_mem, num_10000',
-        number=10000))
+if __name__ == '__main__':
+
+    num_100 = randint(10000, 1000000)
+    num_1000 = randint(1000000, 10000000)
+    num_10000 = randint(100000000, 10000000000000)
+
+    print('Не оптимизированная функция recursive_reverse')
+    print(
+        timeit(
+            "recursive_reverse(num_100)",
+            setup='from __main__ import recursive_reverse, num_100',
+            number=10000))
+    print(
+        timeit(
+            "recursive_reverse(num_1000)",
+            setup='from __main__ import recursive_reverse, num_1000',
+            number=10000))
+    print(
+        timeit(
+            "recursive_reverse(num_10000)",
+            setup='from __main__ import recursive_reverse, num_10000',
+            number=10000))
+
+    print('Оптимизированная функция recursive_reverse_mem')
+    print(
+        timeit(
+            'recursive_reverse_mem(num_100)',
+            setup='from __main__ import recursive_reverse_mem, num_100',
+            number=10000))
+    print(
+        timeit(
+            'recursive_reverse_mem(num_1000)',
+            setup='from __main__ import recursive_reverse_mem, num_1000',
+            number=10000))
+    print(
+        timeit(
+            'recursive_reverse_mem(num_10000)',
+            setup='from __main__ import recursive_reverse_mem, num_10000',
+            number=10000))
+
+"""
+При однократном запуске скрипта - смысла в мемоизации нет, т.к. при рекурсивном 
+вызове каждый раз для числа без последней цифры - данные повторяться не будут и 
+вызовов меньше не станет. При многократном использовании этой функции  - 
+смысл в мемоизации есть - ранее посчитанные данные будут сразу забираться из 
+ранее посчитанных в кеше, что сильно ускоряет работу скрипта.
+"""
